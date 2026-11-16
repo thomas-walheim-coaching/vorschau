@@ -242,3 +242,7 @@ h1,h2{hyphens:auto;overflow-wrap:break-word}
 #warum .ich-raster{align-items:start}
 #warum .bild.weg{position:sticky;top:100px}
 @media(max-width:900px){#warum .bild.weg{position:static}}
+.dlg-zus{background:#fff;border-radius:18px;padding:14px 18px;margin:18px 0 6px;font-size:15px;line-height:1.5}
+.dlg-zus b{display:block;font-family:var(--serif);font-weight:400;font-size:19px;margin-bottom:4px}
+.dlg-zus span{display:block;color:var(--grau)}.dlg-zus #zus-preis{color:var(--tinte);font-weight:600;margin-top:4px}
+@media(min-width:701px){.dlg form .dlg-zus{grid-column:1/-1}}

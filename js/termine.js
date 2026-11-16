@@ -62,10 +62,13 @@
   function fehler(text) { fehlerBox.textContent = text || ""; fehlerBox.hidden = !text; }
   function oeffne(k) {
     aktuell = k; warteliste = frei(k) === 0; zuletztFokus = document.activeElement; form.reset(); fehler("");
-    document.getElementById("dlg-kicker").textContent = warteliste ? "Warteliste" : "Anmeldung";
-    document.getElementById("dlg-titel").textContent = warteliste ? "Auf die Warteliste" : "Verbindlich anmelden";
+    document.getElementById("dlg-kicker").textContent = warteliste ? "Warteliste" : "Buchung";
+    document.getElementById("dlg-titel").textContent = warteliste ? "Auf die Warteliste" : "Kurs buchen";
+    document.getElementById("zus-kurs").textContent = k.dataset.titel; document.getElementById("zus-wann").textContent = k.dataset.wann;
+    document.getElementById("zus-wo").textContent = k.dataset.wo; document.getElementById("zus-preis").textContent = "Preis: " + (k.dataset.preis || "99 €") + " pro Person (inkl. gesetzlicher Umsatzsteuer), 4 Termine";
+    document.getElementById("dlg-zus").hidden = warteliste;
     document.getElementById("dlg-sub").textContent = k.dataset.titel + " · " + k.dataset.wann + " · " + k.dataset.wo;
-    senden.textContent = warteliste ? "Auf Warteliste eintragen" : "Verbindlich anmelden"; senden.disabled = false;
+    senden.textContent = warteliste ? "Auf Warteliste eintragen" : "Zahlungspflichtig buchen"; senden.disabled = false;
     document.getElementById("dlg-hinweis").textContent = warteliste
       ? "Dieser Termin ist ausgebucht. Wir melden uns, sobald ein Platz frei wird."
       : "Dein Platz ist 24 Stunden für dich reserviert. Verbindlich wird er, sobald du den Link in der Bestätigungs-Mail anklickst. Der Kurs findet ab 5 Teilnehmenden statt (höchstens 13).";
@@ -75,14 +78,14 @@
   [].forEach.call(dlg.querySelectorAll("[data-zu]"), function (b) { b.addEventListener("click", schliesse); });
   dlg.addEventListener("click", function (e) { if (e.target === dlg) schliesse(); });
 
-  var FELDTEXT = { email: "Bitte eine gültige E-Mail-Adresse eingeben.", einwilligung: "Bitte stimme der Datenschutzerklärung zu.", geburtstermin: "Bitte ein gültiges Datum wählen." };
+  var FELDTEXT = { agb: "Bitte bestätige die AGB und die Widerrufsbelehrung.", email: "Bitte eine gültige E-Mail-Adresse eingeben.", einwilligung: "Bitte stimme der Datenschutzerklärung zu.", geburtstermin: "Bitte ein gültiges Datum wählen." };
   form.addEventListener("submit", function (e) {
     e.preventDefault(); if (!form.reportValidity()) return;
     if (!LIVE) {                                   // Testmodus: Platz wird reserviert (Zähler −1), nichts wird gesendet
       if (!warteliste) { var s = lade(), id = aktuell.dataset.id; s[id] = (s[id] || 0) + 1; speichere(s); zeige(); }
       schritt(warteliste ? "warte" : "mail"); form.reset(); return;
     }
-    var f = new FormData(form), body = { termin_id: aktuell.dataset.id, einwilligung: !!f.get("einwilligung") };
+    var f = new FormData(form), body = { termin_id: aktuell.dataset.id, einwilligung: !!f.get("einwilligung"), agb: !!f.get("agb") };
     ["name", "email", "tel", "strasse", "ort", "geburtstermin"].forEach(function (n) { body[n] = f.get(n) || ""; });
     senden.disabled = true; fehler("");
     fetch(cfg.API + "/api/anmeldung", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) })
