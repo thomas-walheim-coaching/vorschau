@@ -31,9 +31,12 @@
 <label>PLZ und Ort<input name="ort" autocomplete="address-level2" required></label>
 <label>Name der beschenkten Person (optional)<input name="beschenkt"></label>
 <label class="check"><input type="checkbox" name="einwilligung" required> <span>Ich habe die <a href="datenschutz.html" target="_blank" rel="noopener">Datenschutzerklärung</a> gelesen und willige in die Verarbeitung meiner Angaben zur Abwicklung meiner Bestellung ein.</span></label>
-<button class="knopf" type="submit">Gutschein kaufen</button></form></div>
+<div class="dlg-zus"><b>Dein Gutschein</b><span>Gutschein für einen Platz im Vater-Vorbereitungskurs</span><span>Per E-Mail mit Code, sobald die Zahlung eingegangen ist · drei Jahre gültig</span><span class="preis">Preis: 99 € (inkl. gesetzlicher Umsatzsteuer)</span></div>
+<label class="check"><input type="checkbox" name="agb" required> <span>Ich habe die <a href="agb.html" target="_blank" rel="noopener">AGB</a> und die <a href="widerruf.html" target="_blank" rel="noopener">Widerrufsbelehrung</a> gelesen und akzeptiere die AGB.</span></label>
+<p class="dlg-fehler" id="gs-fehler" role="alert" hidden></p>
+<button class="knopf" type="submit" id="gs-senden">Zahlungspflichtig bestellen</button></form></div>
 <div class="dlg-schritt" data-schritt="fertig" hidden><p class="kicker">Geschafft</p><h2 tabindex="-1">Danke für deine Bestellung</h2>
-<p>Du bekommst den Gutschein per E-Mail.</p><p class="dlg-test"><b>Testmodus:</b> Es wurde nichts gesendet und nichts bestellt.</p><button class="knopf" type="button" data-zu>Schließen</button></div></dialog><p class="termin-note">Beispieltermine zur Ansicht. Die Buchung läuft im Testmodus, es wird nichts gesendet. <button class="textlink" type="button" id="test-reset">Zähler zurücksetzen</button></p></div><dialog id="buchen-dialog" class="dlg" aria-labelledby="dlg-titel">
+<p id="gs-text">Du bekommst den Gutschein per E-Mail.</p><p class="dlg-test"><b>Testmodus:</b> Es wurde nichts gesendet und nichts bestellt.</p><button class="knopf" type="button" data-zu>Schließen</button></div></dialog><p class="termin-note">Beispieltermine zur Ansicht. Die Buchung läuft im Testmodus, es wird nichts gesendet. <button class="textlink" type="button" id="test-reset">Zähler zurücksetzen</button></p></div><dialog id="buchen-dialog" class="dlg" aria-labelledby="dlg-titel">
 <button class="dlg-zu" type="button" data-zu aria-label="Fenster schließen">&times;</button>
 <div class="dlg-schritt" data-schritt="form">
 <p class="kicker" id="dlg-kicker">Buchung</p><h2 id="dlg-titel" tabindex="-1">Kurs buchen</h2>
@@ -45,6 +48,7 @@
 <label>Straße und Hausnummer<input name="strasse" autocomplete="street-address" required></label>
 <label>PLZ und Ort<input name="ort" autocomplete="address-level2" required></label>
 <label>Voraussichtlicher Geburtstermin (optional)<input name="geburtstermin" type="date"></label>
+<label>Gutschein-Code (optional)<input name="gutschein" autocomplete="off" autocapitalize="characters" placeholder="TW-XXXX-XXXX-XXXX" maxlength="24"></label>
 <label class="check"><input type="checkbox" name="einwilligung" required> <span>Ich habe die <a href="datenschutz.html" target="_blank" rel="noopener">Datenschutzerklärung</a> gelesen und willige in die Verarbeitung meiner Angaben zur Abwicklung meiner Anmeldung ein.</span></label>
 <div class="dlg-zus" id="dlg-zus" aria-live="polite"><b>Deine Buchung</b><span id="zus-kurs"></span><span id="zus-wann"></span><span id="zus-wo"></span><span id="zus-preis"></span></div>
 <label class="check"><input type="checkbox" name="agb" required> <span>Ich habe die <a href="agb.html" target="_blank" rel="noopener">AGB</a> und die <a href="widerruf.html" target="_blank" rel="noopener">Widerrufsbelehrung</a> gelesen und akzeptiere die AGB.</span></label>

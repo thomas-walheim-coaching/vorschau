@@ -78,14 +78,14 @@
   [].forEach.call(dlg.querySelectorAll("[data-zu]"), function (b) { b.addEventListener("click", schliesse); });
   dlg.addEventListener("click", function (e) { if (e.target === dlg) schliesse(); });
 
-  var FELDTEXT = { agb: "Bitte bestätige die AGB und die Widerrufsbelehrung.", email: "Bitte eine gültige E-Mail-Adresse eingeben.", einwilligung: "Bitte stimme der Datenschutzerklärung zu.", geburtstermin: "Bitte ein gültiges Datum wählen." };
+  var FELDTEXT = { gutschein: "Der Gutschein-Code ist ungültig, schon eingelöst oder abgelaufen.", agb: "Bitte bestätige die AGB und die Widerrufsbelehrung.", email: "Bitte eine gültige E-Mail-Adresse eingeben.", einwilligung: "Bitte stimme der Datenschutzerklärung zu.", geburtstermin: "Bitte ein gültiges Datum wählen." };
   form.addEventListener("submit", function (e) {
     e.preventDefault(); if (!form.reportValidity()) return;
     if (!LIVE) {                                   // Testmodus: Platz wird reserviert (Zähler −1), nichts wird gesendet
       if (!warteliste) { var s = lade(), id = aktuell.dataset.id; s[id] = (s[id] || 0) + 1; speichere(s); zeige(); }
       schritt(warteliste ? "warte" : "mail"); form.reset(); return;
     }
-    var f = new FormData(form), body = { termin_id: aktuell.dataset.id, einwilligung: !!f.get("einwilligung"), agb: !!f.get("agb") };
+    var f = new FormData(form), body = { termin_id: aktuell.dataset.id, einwilligung: !!f.get("einwilligung"), agb: !!f.get("agb"), gutschein: (f.get("gutschein") || "").trim() };
     ["name", "email", "tel", "strasse", "ort", "geburtstermin"].forEach(function (n) { body[n] = f.get(n) || ""; });
     senden.disabled = true; fehler("");
     fetch(cfg.API + "/api/anmeldung", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) })
@@ -93,7 +93,7 @@
       .then(function (x) {
         if (x.code === 200) { form.reset(); laden(); schritt(x.j.status === "warte" ? "warte" : "mail"); return; }
         var fe = x.j && x.j.fehler, msg = "Das hat leider nicht geklappt. Bitte versuche es später noch einmal.";
-        if (x.code === 409) msg = "Mit dieser E-Mail-Adresse gibt es für diesen Termin schon eine Anmeldung.";
+        if (x.code === 409) msg = (fe && fe.termin_id) ? "Dieser Termin ist ausgebucht. Dein Gutschein bleibt gültig, bitte wähle einen anderen Termin." : "Mit dieser E-Mail-Adresse gibt es für diesen Termin schon eine Anmeldung.";
         else if (x.code === 410) msg = "Dieser Termin liegt in der Vergangenheit.";
         else if (x.code === 400 && fe && typeof fe === "object") { var k = Object.keys(fe)[0]; msg = FELDTEXT[k] || "Bitte prüfe deine Angaben (" + k + ")."; }
         fehler(msg); senden.disabled = false; laden();
@@ -113,10 +113,27 @@
     if (LIVE && !cfg.GUTSCHEIN) document.getElementById("gutschein").hidden = true;
     var gSchritt = function (n) { [].forEach.call(gd.querySelectorAll(".dlg-schritt"), function (s) { s.hidden = s.dataset.schritt !== n; }); var h = gd.querySelector('.dlg-schritt[data-schritt="' + n + '"] h2'); if (h) h.focus(); };
     var gZu = function () { if (gd.close) gd.close(); go.focus(); };
-    go.addEventListener("click", function () { gf.reset(); gSchritt("form"); if (gd.showModal) gd.showModal(); else gd.setAttribute("open", ""); });
+    var gsFehler = document.getElementById("gs-fehler"), gsSenden = document.getElementById("gs-senden");
+    go.addEventListener("click", function () { gf.reset(); gsFehler.hidden = true; gsSenden.disabled = false; gSchritt("form"); if (gd.showModal) gd.showModal(); else gd.setAttribute("open", ""); });
     [].forEach.call(gd.querySelectorAll("[data-zu]"), function (b) { b.addEventListener("click", gZu); });
     gd.addEventListener("click", function (e) { if (e.target === gd) gZu(); });
-    gf.addEventListener("submit", function (e) { e.preventDefault(); if (!gf.reportValidity()) return; gf.reset(); gSchritt("fertig"); });   // Testmodus: nichts wird gesendet
+    gf.addEventListener("submit", function (e) {
+      e.preventDefault(); if (!gf.reportValidity()) return;
+      if (!LIVE) { gf.reset(); gSchritt("fertig"); return; }   // Testmodus: nichts wird gesendet
+      var f = new FormData(gf), body = { einwilligung: !!f.get("einwilligung"), agb: !!f.get("agb") };
+      ["name", "email", "strasse", "ort", "beschenkt"].forEach(function (n) { body[n] = f.get(n) || ""; });
+      gsSenden.disabled = true; gsFehler.hidden = true;
+      fetch(cfg.API + "/api/gutschein", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) })
+        .then(function (r) { return r.json().then(function (j) { return { code: r.status, j: j }; }); })
+        .then(function (x) {
+          if (x.code === 200) { gf.reset(); document.getElementById("gs-text").textContent = "Wir haben dir eine E-Mail mit den Bezahldaten und der Rechnung geschickt. Sobald deine Zahlung eingegangen ist, bekommst du den Gutschein mit dem Code per E-Mail."; gSchritt("fertig"); return; }
+          var fe = x.j && x.j.fehler, msg = "Das hat leider nicht geklappt. Bitte versuche es später noch einmal.";
+          if (x.code === 429) msg = "Zu viele offene Bestellungen mit dieser E-Mail-Adresse. Bitte zahle erst die offenen Gutscheine.";
+          else if (x.code === 400 && fe && typeof fe === "object") { var k = Object.keys(fe)[0]; msg = FELDTEXT[k] || "Bitte prüfe deine Angaben (" + k + ")."; }
+          gsFehler.textContent = msg; gsFehler.hidden = false; gsSenden.disabled = false;
+        })
+        .catch(function () { gsFehler.textContent = "Keine Verbindung zum Dienst. Bitte versuche es später noch einmal."; gsFehler.hidden = false; gsSenden.disabled = false; });
+    });
   }
 
   function laden() {
