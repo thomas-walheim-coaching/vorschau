@@ -185,27 +185,27 @@ section{padding:84px 0}section.eng{padding:60px 0}
 .termin.ausgebucht .knopf{background:transparent;color:var(--tinte);box-shadow:inset 0 0 0 1px var(--tinte)}
 .termin-note{max-width:640px;margin:26px auto 0;font-size:13.5px;color:var(--grau)}
 .termin-note .textlink{background:none;border-top:0;border-left:0;border-right:0;font:inherit;cursor:pointer;color:var(--tinte);margin-left:6px;font-size:13.5px}
-dialog#buchen-dialog{border:0;border-radius:32px;padding:44px 40px 40px;width:min(580px,calc(100% - 32px));max-height:calc(100vh - 32px);overflow:auto;background:var(--creme);color:var(--tinte);text-align:left;margin:auto;box-shadow:0 30px 80px rgba(47,41,37,.28)}
-dialog#buchen-dialog::backdrop{background:rgba(47,41,37,.5);backdrop-filter:blur(3px)}
+dialog.dlg{border:0;border-radius:32px;padding:44px 40px 40px;width:min(580px,calc(100% - 32px));max-height:calc(100vh - 32px);overflow:auto;background:var(--creme);color:var(--tinte);text-align:left;margin:auto;box-shadow:0 30px 80px rgba(47,41,37,.28)}
+dialog.dlg::backdrop{background:rgba(47,41,37,.5);backdrop-filter:blur(3px)}
 .dlg-zu{position:absolute;top:14px;right:16px;width:42px;height:42px;border-radius:50%;border:1px solid var(--linie);background:#fff;font-size:24px;line-height:1;cursor:pointer;color:var(--tinte)}
 .dlg-schritt h2{font-size:clamp(28px,5vw,38px);margin:10px 0 12px}
 .dlg-schritt h2:focus{outline:none}
 .dlg-sub{color:var(--grau);font-size:15.5px;margin-bottom:6px}
-#buchen-form label{display:block;margin:14px 0;font-weight:500;font-size:14.5px}
-#buchen-form input:not([type=checkbox]){display:block;width:100%;padding:13px 18px;border:1px solid var(--salbei-tief);border-radius:999px;font:inherit;margin-top:6px;background:#fff;color:var(--tinte)}
-#buchen-form label.check{display:flex;gap:12px;align-items:flex-start;font-weight:400;font-size:14.5px}
-#buchen-form label.check input{margin-top:5px;flex:none}
-#buchen-form label.check a{text-decoration:underline}
+.dlg form label{display:block;margin:14px 0;font-weight:500;font-size:14.5px}
+.dlg form input:not([type=checkbox]){display:block;width:100%;padding:13px 18px;border:1px solid var(--salbei-tief);border-radius:999px;font:inherit;margin-top:6px;background:#fff;color:var(--tinte)}
+.dlg form label.check{display:flex;gap:12px;align-items:flex-start;font-weight:400;font-size:14.5px}
+.dlg form label.check input{margin-top:5px;flex:none}
+.dlg form label.check a{text-decoration:underline}
 .dlg-hinweis{background:var(--salbei);border-radius:18px;padding:12px 18px;font-size:14.5px;margin:18px 0 6px}
-#buchen-form .knopf{display:flex;margin:22px 0 0;width:100%;justify-content:center}
+.dlg form .knopf{display:flex;margin:22px 0 0;width:100%;justify-content:center}
 .dlg-test{background:var(--butter);border-radius:16px;padding:10px 16px;font-size:14px;margin:18px 0}
 .dlg-schritt p{color:var(--grau)}
 .dlg-schritt .knopf{margin:6px 0 0}
-@media(max-width:700px){.termin{grid-template-columns:1fr;text-align:center;justify-items:center;padding:24px 20px}.plaetze{justify-content:center}dialog#buchen-dialog{padding:40px 22px 28px;border-radius:26px}}
-@media(min-width:701px){dialog#buchen-dialog{width:min(700px,calc(100% - 32px))}
-#buchen-form{display:grid;grid-template-columns:1fr 1fr;column-gap:18px}
-#buchen-form label.check,#buchen-form .dlg-hinweis,#buchen-form .knopf{grid-column:1/-1}}
-#buchen-form{max-width:none;margin:18px 0 0}
+@media(max-width:700px){.termin{grid-template-columns:1fr;text-align:center;justify-items:center;padding:24px 20px}.plaetze{justify-content:center}dialog.dlg{padding:40px 22px 28px;border-radius:26px}}
+@media(min-width:701px){dialog.dlg{width:min(700px,calc(100% - 32px))}
+.dlg form{display:grid;grid-template-columns:1fr 1fr;column-gap:18px}
+.dlg form label.check,.dlg form .dlg-hinweis,.dlg form .knopf{grid-column:1/-1}}
+.dlg form{max-width:none;margin:18px 0 0}
 /* FAQ */
 .faq-liste{max-width:760px;margin:44px auto 0;display:grid;gap:12px;text-align:left}
 .faq-punkt{background:#fff;border-radius:24px;box-shadow:0 1px 0 var(--linie)}
@@ -217,3 +217,28 @@ dialog#buchen-dialog::backdrop{background:rgba(47,41,37,.5);backdrop-filter:blur
 .faq-punkt summary:focus-visible{outline:3px solid #2b2480;outline-offset:2px;border-radius:24px}
 .faq-mehr{text-align:center;margin-top:30px}
 .dlg-fehler{background:#f6d9d0;border-radius:16px;padding:10px 16px;font-size:14.5px;margin:14px 0 0;color:#6b2a1a}
+/* Rechtstexte */
+.rechtstext{max-width:760px;margin:0 auto;text-align:left}
+.rechtstext>p:first-child{margin-bottom:6px}
+.rechtstext h2{font-size:clamp(24px,3vw,32px);margin:44px 0 14px}
+.rechtstext h3{font-size:22px;margin:26px 0 10px}
+.rechtstext p{color:#4b423b;font-size:16.5px;margin:0 0 14px}
+.rechtstext .adresse{color:var(--tinte);margin-bottom:22px}
+.muster{background:#fff;border-radius:24px;padding:28px;margin-top:18px}
+.muster .feld{display:flex;gap:12px;align-items:flex-end;margin:22px 0 0}
+.muster .feld span{flex:none}
+.muster .feld i{flex:1;border-bottom:1px solid var(--tinte);height:1.3em}
+.muster .hinweis-klein{font-size:14px;margin:14px 0 0}
+@media print{.kopf,.fuss,.entwurf{display:none}.rechtstext{max-width:none}}
+.fuss-unten nav{flex-wrap:wrap;gap:8px 20px}
+h1,h2{hyphens:auto;overflow-wrap:break-word}
+.termin:not(.ausgebucht) .plaetze{display:none}
+.termin-info .wo{margin-bottom:0}
+.termin.ausgebucht .termin-info .wo{margin-bottom:10px}
+.fakten div:nth-child(3){grid-column:1/-1;border-right:0;padding-left:0;padding-right:0}
+.gutschein{display:grid;grid-template-columns:1fr auto;gap:26px;align-items:center;max-width:860px;margin:26px auto 0;padding:26px 30px;border-radius:28px;background:var(--salbei);text-align:left}
+.gutschein h3{font-size:26px;margin:6px 0 6px}.gutschein p{margin:0;color:#4b5543;font-size:16px}.gutschein .kicker{color:#4b5543;margin:0}
+@media(max-width:700px){.gutschein{grid-template-columns:1fr;text-align:center;justify-items:center}}
+#warum .ich-raster{align-items:start}
+#warum .bild.weg{position:sticky;top:100px}
+@media(max-width:900px){#warum .bild.weg{position:static}}

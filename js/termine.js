@@ -48,9 +48,8 @@
     karten().forEach(function (k) {
       var f = frei(k), g = +k.dataset.gesamt, voll = f === 0;
       k.classList.toggle("ausgebucht", voll);
-      k.querySelector(".plaetze-text").textContent = voll ? "ausgebucht" : "noch " + f + " von " + g + " Plätzen frei";
-      var p = ""; for (var i = 0; i < g; i++) p += '<i class="' + (i < f ? "frei" : "belegt") + '"></i>';
-      k.querySelector(".punkte").innerHTML = p;
+      k.querySelector(".plaetze-text").textContent = voll ? "ausgebucht" : "";   // Thomas 16.11.2026: keine Platzanzeige, nur "ausgebucht"
+      k.querySelector(".punkte").innerHTML = "";
       k.querySelector("[data-buchen]").textContent = voll ? "Auf die Warteliste" : "Jetzt buchen";
     });
   }
@@ -69,7 +68,7 @@
     senden.textContent = warteliste ? "Auf Warteliste eintragen" : "Verbindlich anmelden"; senden.disabled = false;
     document.getElementById("dlg-hinweis").textContent = warteliste
       ? "Dieser Termin ist ausgebucht. Wir melden uns, sobald ein Platz frei wird."
-      : "Dein Platz ist 24 Stunden für dich reserviert. Verbindlich wird er, sobald du den Link in der Bestätigungs-Mail anklickst.";
+      : "Dein Platz ist 24 Stunden für dich reserviert. Verbindlich wird er, sobald du den Link in der Bestätigungs-Mail anklickst. Der Kurs findet ab 5 Teilnehmenden statt (höchstens 13).";
     schritt("form"); if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", "");
   }
   function schliesse() { if (dlg.close) dlg.close(); else dlg.removeAttribute("open"); if (zuletztFokus && zuletztFokus.focus) zuletztFokus.focus(); }
@@ -103,6 +102,19 @@
   linkBtn.addEventListener("click", function () { schritt("fertig"); });   // nur Testmodus: simuliert den Klick auf den Mail-Link
   var reset = document.getElementById("test-reset");
   if (reset) reset.addEventListener("click", function () { speichere({}); zeige(); });
+
+  // Gutschein kaufen (Testmodus; echter Versand erst nach Freigabe)
+  var gd = document.getElementById("gutschein-dialog"), go = document.getElementById("gutschein-oeffnen");
+  if (gd && go) {
+    var gf = document.getElementById("gutschein-form");
+    if (LIVE && !cfg.GUTSCHEIN) document.getElementById("gutschein").hidden = true;
+    var gSchritt = function (n) { [].forEach.call(gd.querySelectorAll(".dlg-schritt"), function (s) { s.hidden = s.dataset.schritt !== n; }); var h = gd.querySelector('.dlg-schritt[data-schritt="' + n + '"] h2'); if (h) h.focus(); };
+    var gZu = function () { if (gd.close) gd.close(); go.focus(); };
+    go.addEventListener("click", function () { gf.reset(); gSchritt("form"); if (gd.showModal) gd.showModal(); else gd.setAttribute("open", ""); });
+    [].forEach.call(gd.querySelectorAll("[data-zu]"), function (b) { b.addEventListener("click", gZu); });
+    gd.addEventListener("click", function (e) { if (e.target === gd) gZu(); });
+    gf.addEventListener("submit", function (e) { e.preventDefault(); if (!gf.reportValidity()) return; gf.reset(); gSchritt("fertig"); });   // Testmodus: nichts wird gesendet
+  }
 
   function laden() {
     if (!LIVE) { zeige(); return Promise.resolve(); }
