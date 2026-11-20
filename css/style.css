@@ -258,3 +258,4 @@ h1,h2{hyphens:auto;overflow-wrap:break-word}
 .nr-kreis{width:52px;height:52px;border-radius:50%;background:var(--salbei);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:24px;font-weight:300}
 @media(max-width:700px){.ablauf-liste li{grid-template-columns:1fr;padding:22px 20px}}
 .dlg-zus .preis{color:var(--tinte);font-weight:600;margin-top:4px}
+mark.luecke{background:#fff0c9;color:#7a2e1a;padding:1px 6px;border-radius:6px;font-weight:600}
