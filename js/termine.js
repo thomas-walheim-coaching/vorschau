@@ -30,7 +30,7 @@
     s.textContent = d.toLocaleDateString("de-DE", { month: "short", year: "numeric", timeZone: "UTC" }).replace(".", ""); datum.appendChild(b); datum.appendChild(s);
     var info = document.createElement("div"); info.className = "termin-info";
     var h3 = document.createElement("h3"); h3.textContent = t.titel;
-    var p1 = document.createElement("p"); p1.textContent = a.dataset.wann + " · 4 Termine";
+    var p1 = document.createElement("p"); p1.textContent = a.dataset.wann + " · alle 4 Termine in der Buchung enthalten";
     var p2 = document.createElement("p"); p2.className = "wo"; p2.textContent = a.dataset.wo;
     var p3 = document.createElement("p"); p3.className = "plaetze";
     var pk = document.createElement("span"); pk.className = "punkte"; pk.setAttribute("aria-hidden", "true");
@@ -65,7 +65,7 @@
     document.getElementById("dlg-kicker").textContent = warteliste ? "Warteliste" : "Buchung";
     document.getElementById("dlg-titel").textContent = warteliste ? "Auf die Warteliste" : "Kurs buchen";
     document.getElementById("zus-kurs").textContent = k.dataset.titel; document.getElementById("zus-wann").textContent = k.dataset.wann;
-    document.getElementById("zus-wo").textContent = k.dataset.wo; document.getElementById("zus-preis").textContent = "Preis: " + (k.dataset.preis || "99 €") + " pro Person (inkl. gesetzlicher Umsatzsteuer), 4 Termine";
+    document.getElementById("zus-wo").textContent = k.dataset.wo; document.getElementById("zus-preis").textContent = "Preis: " + (k.dataset.preis || "99 €") + " pro Person (inkl. gesetzlicher Umsatzsteuer), die Buchung enthält alle 4 Termine";
     document.getElementById("dlg-zus").hidden = warteliste;
     document.getElementById("dlg-sub").textContent = k.dataset.titel + " · " + k.dataset.wann + " · " + k.dataset.wo;
     senden.textContent = warteliste ? "Auf Warteliste eintragen" : "Zahlungspflichtig buchen"; senden.disabled = false;
